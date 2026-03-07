@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
-import {toast} from 'react-hot-toast';
+import React, { useEffect, useState } from 'react'
+import toast from 'react-hot-toast';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const Home = () => {
+const EditNote = () => {
     const initialNote = {
         title:"",
         description:""
     }
+    const {id} = useParams();
     const [note, setNote] = useState(initialNote);
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -22,8 +25,8 @@ const Home = () => {
         e.preventDefault()
         
         try {
-          const res = await fetch("http://localhost:5000/add-note", {
-          method:"POST",
+          const res = await fetch(`http://localhost:5000/notes/${id}`, {
+          method:"PUT",
           headers:{
             "Content-Type":"application/json"
           },
@@ -31,22 +34,36 @@ const Home = () => {
         });
 
         if(res.ok){
-          toast.success("Note Added");
-          setNote(initialNote);
+          toast.success("Note Updated");
+          setTimeout(() => {
+            navigate("/notes");
+          }, 1000);
         }
 
         } catch (error) {
           console.log(error);
         }
-        
     }
+
+    useEffect(() => {
+        const fetchNote = async() =>{
+            try {
+                const res = await fetch(`http://localhost:5000/notes/${id}`);
+                const data = await res.json();
+                setNote(data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchNote();
+    }, [id]);
     
   return (
     <section className="text-gray-600 body-font relative">
   <div className="container px-5 py-24 mx-auto">
     <div className="flex flex-col text-center w-full mb-12">
       <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
-        Add New Note
+        Edit Note
       </h1>
     </div>
     <form className="lg:w-1/2 md:w-2/3 mx-auto" onSubmit={handleSubmit}>
@@ -87,7 +104,7 @@ const Home = () => {
         </div>
         <div className="p-2 w-full">
           <button className="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-            Add
+            Update
           </button>
         </div>
       </div>
@@ -98,4 +115,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default EditNote;
