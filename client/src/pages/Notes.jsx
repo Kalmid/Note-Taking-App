@@ -40,6 +40,12 @@ const Notes = () => {
         }
     }
 
+    const searchNotes = async (query) => {
+        const res = await fetch(`http://localhost:5000/notes/search?q=${query}`);
+        const data = await res.json();
+        setNotes(data);
+    };
+
   return (
     <section className="text-gray-600 body-font">
         <div className="container px-5 py-24 mx-auto">
@@ -47,6 +53,12 @@ const Notes = () => {
                 <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
                     Notes
                 </h1>
+                <input
+                    type="text"
+                    placeholder="Search notes..."
+                    className="border p-2 mb-6"
+                    onChange={(e)=>searchNotes(e.target.value)}
+                />
             </div>
             <div className="flex flex-wrap -m-4 text-center">
                 { 
