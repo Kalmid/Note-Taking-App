@@ -69,14 +69,3 @@ npm start
 Start frontend
 cd client
 npm run dev
-
-
-## Notes
-
-JWT authentication and full-text search were not fully implemented.
-
-The current version supports:
-- Creating notes
-- Editing notes
-- Deleting notes
-- Viewing notes
