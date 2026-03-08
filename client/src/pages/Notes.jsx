@@ -41,9 +41,13 @@ const Notes = () => {
     }
 
     const searchNotes = async (query) => {
-        const res = await fetch(`http://localhost:5000/notes/search?q=${query}`);
-        const data = await res.json();
-        setNotes(data);
+        try {
+            const res = await fetch(`http://localhost:5000/notes/search?q=${query}`);
+            const data = await res.json();
+            setNotes(data);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
   return (
@@ -56,7 +60,7 @@ const Notes = () => {
                 <input
                     type="text"
                     placeholder="Search notes..."
-                    className="border p-2 mb-6"
+                    className="border rounded p-2 mb-6 w-full"
                     onChange={(e)=>searchNotes(e.target.value)}
                 />
             </div>
